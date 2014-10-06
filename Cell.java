@@ -39,6 +39,7 @@ public class Cell implements Comparable<Cell>
      */public int get_y(){
       return this.y;  
     }
+    
 
     /**Method that checks if cells are identical
      * 

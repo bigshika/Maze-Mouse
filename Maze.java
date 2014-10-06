@@ -13,7 +13,7 @@ public class Maze
 {
     // instance variables - replace the example below with your own
     private int size;
-    private ArrayList<Cell> maze;
+    private Cell[] maze;
     public static final int TOP = 50;
     public static final int LEFT = 50;
     public static final int CELL_SIZE = 25;
@@ -29,7 +29,6 @@ public class Maze
         this.size = size;
         this.build_maze();
         this.draw();
-        Collections.sort(this.maze);
     }
     
     /**
@@ -42,7 +41,7 @@ public class Maze
      * This method gets the exit square of the maze
      */
     public Cell get_exit(){
-       return this.maze.get(this.maze.size() - 1);
+       return this.maze[((this.size - 1) + (this.size - 1) * (this.size - 1))];
     }
 
     /**
@@ -110,12 +109,7 @@ public class Maze
     /**This will get a cell from the maze upon being given the coordinates
      * 
      */public Cell get_cell(int x, int y){
-       for (Cell c : this.maze){
-          if (c.get_x() == x && c.get_y() == y){
-              return c;
-        }
-      }
-      return null;
+      return this.maze[(y * this.size + x)];
     }
     
     /**This method creates the connection between the two cells and if either cell is not
@@ -162,23 +156,40 @@ public class Maze
     }
     
     /**This prints the string representation of the cells, mostly for debugging
-     */public void printList(ArrayList<Cell> list){
+     */public void printList(Cell[] list){
         for (Cell c: list){
             UI.println(c);
         }
+    }
+    
+    /**Calculates the index of the cell in the maze
+     * 
+     */public int index(Cell c){
+       return c.get_y() * (this.size) + c.get_x();
+    }
+    
+    /**Adds a cell to the maze
+     * 
+     */public void addToMaze(Cell c){
+        this.maze[this.index(c)] = c;
     }
     
     /**This is the method that does the work of building the maze, using Prim's algorithm.
     **/
     public void build_maze(){
         // Create a new empty ArrayList to store the maze 
-        this.maze = new ArrayList<Cell>();
+        this.maze = new Cell[this.size * this.size];
+       for(int y = 0; y < this.size; y++){
+            for (int x = 0; x < this.size; x++){
+                this.maze[(y * this.size + x)] = null;
+            }
+        }
         
         //Add the location (0,0) to the maze with no cells connected to it
-        this.maze.add(new Cell(0, 0));
+       this.addToMaze(new Cell(0, 0));
         
-        //Create a frontier list containing the neighbouring cells of (0,0)
-        ArrayList<Cell> frontier_list = this.get_neighbours(this.get_cell(0, 0));
+       //Create a frontier list containing the neighbouring cells of (0,0)
+       ArrayList<Cell> frontier_list = this.get_neighbours(this.get_cell(0, 0));
 
         // while the frontier list is not empty
         while(!frontier_list.isEmpty()){
@@ -188,7 +199,7 @@ public class Maze
 
         // the picked cell will be the next one we add to the maze    
     
-        this.maze.add(picked_cell); 
+        this.addToMaze(picked_cell); 
         frontier_list.remove(picked_cell);
         
         // get the cells neighbouring the cell we picked
@@ -212,7 +223,7 @@ public class Maze
       }
       
       //Set the entrance and exit
-      this.maze.get(0).setEntrance();
+      this.maze[0].setEntrance();
       this.get_cell(this.size -1, this.size -1).setExit();
     }
     
