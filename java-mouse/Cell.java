@@ -17,38 +17,60 @@ public class Cell implements Comparable<Cell>
     private boolean right = false;
     private boolean bottom = false;
     private boolean left = false;
-    private int cell_size = Maze.CELL_SIZE;
+    public static final int MAZE_TOP = 50;
+    public static final int MAZE_LEFT = 50;
+    public static final int CELL_SIZE = 25;
+    private Maze maze;
     
     /**
      * Constructor for objects of class Cell
      */
-    public Cell(int x, int y){
+    public Cell(int x, int y, Maze m){
      this.x = x;
      this.y = y;
      this.corridors = new ArrayList<Cell>();
+     this.maze = m;
+    }
+    
+    public int get_top(){
+        return this.MAZE_TOP;
+    }
+    
+    public int get_left(){
+        return this.MAZE_LEFT;
+    }
+    
+    public int get_cell_size(){
+        return this.CELL_SIZE;
     }
     
     /**Returns the x coordinate of the cell
      * 
-     */public int get_x(){
+     */
+    public int get_x(){
       return this.x;  
     }
     
     /**Returns the y coordinate of the cell
      * 
-     */public int get_y(){
+     */
+    public int get_y(){
       return this.y;  
     }
     
-
-    /**Method that checks if cells are identical
-     * 
-     */public boolean equals(Cell c){
-      if ((this.x == c.get_x()) && (this.y == c.get_y())){
-          return true;
-        } else {
-          return false;  
+    @Override
+    public boolean equals(Object c){
+        if (this instanceof Cell) {
+          if ((this.x == ((Cell)c).get_x()) && (this.y == ((Cell)c).get_y())){
+              return true;
+            }
         }
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        return this.x + this.y * (this.maze.get_size());
     }
 
     /**
@@ -102,22 +124,22 @@ public class Cell implements Comparable<Cell>
     /**Does the work of drawing the cell
      * 
      */public void draw(){
-        //UI.drawRect(Maze.LEFT + this.x * cell_size, Maze.TOP + this.y * cell_size, cell_size, cell_size);
+        //UI.drawRect(this.MAZE_LEFT + this.x * cell_size, this.MAZE_TOP + this.y * cell_size, cell_size, cell_size);
         if (!top){
-           UI.drawLine(Maze.LEFT + this.x * cell_size, Maze.TOP + this.y * cell_size,
-           Maze.LEFT + (this.x + 1) * cell_size, Maze.TOP + this.y * cell_size);
+           UI.drawLine(this.MAZE_LEFT + this.x * this.CELL_SIZE, this.MAZE_TOP + this.y * this.CELL_SIZE,
+           this.MAZE_LEFT + (this.x + 1) * this.CELL_SIZE, this.MAZE_TOP + this.y * this.CELL_SIZE);
         }
         if (!bottom){
-           UI.drawLine(Maze.LEFT + this.x * cell_size, Maze.TOP + (this.y + 1) * cell_size,
-           Maze.LEFT + (this.x + 1) * cell_size, Maze.TOP + (this.y + 1) * cell_size); 
+           UI.drawLine(this.MAZE_LEFT + this.x * this.CELL_SIZE, this.MAZE_TOP + (this.y + 1) * this.CELL_SIZE,
+           this.MAZE_LEFT + (this.x + 1) * this.CELL_SIZE, this.MAZE_TOP + (this.y + 1) * this.CELL_SIZE); 
         }
         if (!right){
-           UI.drawLine(Maze.LEFT + (this.x + 1) * cell_size, Maze.TOP + (this.y)* cell_size,
-           Maze.LEFT + (this.x + 1) * cell_size, Maze.TOP + (this.y + 1) * cell_size); 
+           UI.drawLine(this.MAZE_LEFT + (this.x + 1) * this.CELL_SIZE, this.MAZE_TOP + (this.y)* this.CELL_SIZE,
+           this.MAZE_LEFT + (this.x + 1) * this.CELL_SIZE, this.MAZE_TOP + (this.y + 1) * this.CELL_SIZE); 
         }
         if (!left){
-           UI.drawLine(Maze.LEFT + (this.x) * cell_size, Maze.TOP + (this.y)* cell_size,
-           Maze.LEFT + (this.x) * cell_size, Maze.TOP + (this.y + 1) * cell_size);   
+           UI.drawLine(this.MAZE_LEFT + (this.x) * this.CELL_SIZE, this.MAZE_TOP + (this.y)* this.CELL_SIZE,
+           this.MAZE_LEFT + (this.x) * this.CELL_SIZE, this.MAZE_TOP + (this.y + 1) * this.CELL_SIZE);   
         }
     }
     

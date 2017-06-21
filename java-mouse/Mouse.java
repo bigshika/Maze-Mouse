@@ -13,21 +13,20 @@ public class Mouse
     private int body = 11;
     private int x_tail = 5;
     private int y_tail = 3;
-    private String facing = "right";
+    private boolean facingRight = true;
     
     /**
      * Constructor for objects of class Mouse
      */
-    public Mouse(Cell c)
-    {
+    public Mouse(Cell c) {
         this.current = c;
         this.draw();
     }
     
     /**Constructs a mouse that is in the origin square. Mostly used for debugging.
      * 
-     */public Mouse(){
-       this.current = new Cell(0, 0);
+     */Mouse(){
+       //this.current = new Cell(0, 0);
        this.draw(); 
     }
     
@@ -43,30 +42,30 @@ public class Mouse
         this.current = c;
     }
     
-    /**Turns the mouse left
+    /**
+     * Turns the mouse left
      * 
-     */public void turn_left(){
-        if (facing.equals("right")){
-           this.facing = "left"; 
-        }
+     */
+    public void turn_left(){
+        this.facingRight = facingRight ? false : false;
     }
     
-    /**Turns the mouse right
+    /**
+     * Turns the mouse right
      * 
-     */public void turn_right(){
-       if (facing.equals("left")){
-           this.facing = "right"; 
-        } 
+     */
+    public void turn_right(){
+       this.facingRight = !facingRight ? true : true;
     }
 
     /**
      * Draws the mouse using images ratleft.png and ratright.png
      */
     public void draw(){
-      int x_offset = Maze.LEFT + this.current.get_x() * Maze.CELL_SIZE;
-      int y_offset = Maze.TOP + this.current.get_y() * Maze.CELL_SIZE;
+      int x_offset = current.get_left() + this.current.get_x() * current.get_cell_size();
+      int y_offset = current.get_top() + this.current.get_y() * current.get_cell_size();
       
-      if(this.facing.equals("left")){
+      if(!this.facingRight){
          UI.drawImage("ratleft.png", x_offset + 1, y_offset + 1);
         } else {
          UI.drawImage("ratright.png", x_offset + 1, y_offset + 1);   
@@ -76,6 +75,6 @@ public class Mouse
     /**Erases the mouse
      * 
      */public void erase(){
-      UI.eraseRect(Maze.LEFT + this.current.get_x() * Maze.CELL_SIZE + 1, Maze.TOP + this.current.get_y() * Maze.CELL_SIZE + 1, Maze.CELL_SIZE -2, Maze.CELL_SIZE -2); 
+      UI.eraseRect(Cell.MAZE_LEFT + this.current.get_x() * Cell.CELL_SIZE + 1, Cell.MAZE_TOP + this.current.get_y() * Cell.CELL_SIZE + 1, Cell.CELL_SIZE -2, Cell.CELL_SIZE -2); 
     }
 }
