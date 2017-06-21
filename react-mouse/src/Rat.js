@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {observer} from "mobx-react";
 import './App.css';
 import rat from './PolyesterUnderwearRat.png';
 
